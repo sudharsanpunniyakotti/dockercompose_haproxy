@@ -1,18 +1,26 @@
-version: '3'
+version: "3"
+
 services:
-  product: 
-   build: ./product
-   volumes: 
-       -  ./product:/usr/src/apps
-   ports: 
-      - 5001:80
-
-
-  website: 
-    image: php:apache
+  web1:
+    image: httpd:2.4
     volumes:
-      - ./website:/var/www/html
+      - /web1:/var/www/html/
     ports:
-      - 5000:80
-    depends_on:
-      - product
+      - 8001:80 
+    container_name: 'app1'  
+
+  web2:
+    image: httpd:2.4
+    volumes:
+      - /web2:/var/www/html/
+    ports: 
+      - 8002:80
+    container_name: 'app2'  
+
+  haproxy:
+     image: haproxy:1.7
+     volumes: 
+       - /haproxy:/usr/local/etc/haproxy/haproxy.cfg:ro
+     ports:
+      - 8000:80
+  
